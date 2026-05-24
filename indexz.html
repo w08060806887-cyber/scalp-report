@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>頭皮檢測報告系統</title>
+  <style>
+    *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Noto Sans TC','Microsoft JhengHei',sans-serif;background:#f6f1ea;color:#2d241d}.wrap{max-width:1080px;margin:0 auto;padding:22px}.hero{background:linear-gradient(135deg,#2e241c,#8b6f47);color:white;padding:30px;border-radius:28px;margin-bottom:22px;box-shadow:0 16px 40px rgba(0,0,0,.16)}.hero h1{margin:0 0 8px;font-size:32px}.hero p{margin:0;opacity:.9}.grid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px}.card{background:rgba(255,255,255,.9);border:1px solid rgba(139,111,71,.18);border-radius:24px;padding:22px;box-shadow:0 10px 30px rgba(93,70,43,.08)}h2{margin:0 0 16px;font-size:22px}h3{margin:22px 0 12px;font-size:17px;color:#6d5232}label{display:block;font-weight:800;margin:12px 0 6px}input,textarea,select{width:100%;border:1px solid #d6c6b2;border-radius:14px;padding:12px 14px;font-size:16px;background:white;color:#2d241d}textarea{min-height:86px;resize:vertical}.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.check{display:flex;align-items:center;gap:8px;background:#fbf8f4;border:1px solid #eadfce;padding:10px 12px;border-radius:14px;font-weight:650}.check input{width:auto}.score-row{display:grid;grid-template-columns:1fr 118px;gap:10px;align-items:center;margin-bottom:10px}.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}button{border:0;border-radius:16px;padding:13px 18px;font-size:16px;font-weight:900;cursor:pointer}.primary{background:#2e241c;color:white}.secondary{background:#dec7a5;color:#2e241c}.danger{background:#efe3d3;color:#6d3b2a}.qrbox{text-align:center;background:#fffaf3;border:1px dashed #b99762;border-radius:22px;padding:18px;margin-top:12px;word-break:break-all}.qrbox img{max-width:220px;width:100%;margin:10px auto;display:block}.report{background:white;border-radius:28px;padding:28px;box-shadow:0 16px 40px rgba(0,0,0,.1)}.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:#ead8bb;margin:4px 4px 4px 0;font-weight:800;font-size:14px}.level-good{color:#2f7d4f;font-weight:900}.level-mid{color:#a66a00;font-weight:900}.level-high{color:#b13b2e;font-weight:900}.hidden{display:none}.small{font-size:13px;color:#7a6a58;line-height:1.6}.line{height:1px;background:#eadfce;margin:18px 0}.score-table{width:100%;border-collapse:collapse;margin-top:10px}.score-table th,.score-table td{border-bottom:1px solid #eadfce;text-align:left;padding:10px}.score-table th{background:#fbf4ea}@media(max-width:860px){.grid{grid-template-columns:1fr}.checks{grid-template-columns:1fr}.hero h1{font-size:26px}.wrap{padding:14px}}@media print{body{background:white}.no-print,.hero,.form-card{display:none!important}.wrap{padding:0}.report{box-shadow:none;border-radius:0}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero no-print"><h1>頭皮檢測報告系統</h1><p>門市勾選後，自動產生每位客人的專屬報告連結與 QR Code。</p></div>
+  <div id="formView" class="grid">
+    <div class="card form-card">
+      <h2>建立客戶報告</h2>
+      <label>客戶姓名</label><input id="name" placeholder="例如：王小姐" />
+      <label>檢測日期</label><input id="date" type="date" />
+      <label>頭皮類型</label><select id="type"><option>健康型頭皮</option><option>油性頭皮</option><option>乾性頭皮</option><option>敏感型頭皮</option><option>混合型頭皮</option><option>老化型頭皮</option><option>問題型頭皮</option></select>
+      <h3>量化評分：1良好｜2輕微｜3中度｜4嚴重</h3><div id="scores"></div>
+      <h3>目前觀察到的頭皮問題</h3><div class="checks" id="problems"></div>
+      <h3>客人主要需求</h3><div class="checks" id="needs"></div>
+      <label>建議療程</label><select id="course"><option>深層淨化調理</option><option>控油平衡調理</option><option>舒敏修護調理</option><option>保濕修護調理</option><option>毛囊活化養護</option><option>去屑止癢調理</option><option>頭皮放鬆舒壓</option></select>
+      <label>建議頻率</label><select id="freq"><option>每週 1 次，連續 4 週觀察改善</option><option>每週 2 次，先密集調理 2 週</option><option>每 2 週 1 次，穩定保養</option><option>每月 1 次，日常維持保養</option></select>
+      <label>專業建議</label><textarea id="advice" placeholder="例如：目前頭皮出油與毛孔堵塞較明顯，建議先做深層淨化，再搭配控油養護。"></textarea>
+      <div class="btns"><button class="primary" onclick="generateReport()">產生報告＋QR</button><button class="secondary" onclick="fillDemo()">Demo 範例</button><button class="danger" onclick="clearForm()">清空</button></div>
+    </div>
+    <div class="card no-print"><h2>QR Code</h2><p class="small">產生後，把 QR Code 給客人掃，客人就會看到自己的專屬頭皮檢測結果。</p><div class="qrbox" id="qrbox">尚未產生報告</div><div class="btns"><button class="secondary" onclick="copyLink()">複製客戶連結</button><button class="secondary" onclick="window.print()">列印報告</button></div><p class="small">快速版：資料存在網址內，不需資料庫。正式長期版建議升級後台資料庫，避免個資放在網址。</p></div>
+  </div>
+  <div id="reportView" class="hidden"><div class="report" id="report"></div><div class="btns no-print"><button class="secondary" onclick="backToForm()">回到建立報告</button><button class="primary" onclick="window.print()">列印 / 存 PDF</button></div></div>
+</div>
+<script>
+const scoreItems=['出油狀況','毛孔堵塞','頭皮敏感','頭皮泛紅','頭皮乾燥','頭皮屑','掉髮狀況','毛髮粗細','毛囊健康度','新生髮狀況'];
+const problemItems=['出油明顯','髮根扁塌','毛孔堵塞','頭皮異味','敏感泛紅','頭皮乾燥','頭皮屑','搔癢','掉髮增加','髮根細軟','新生髮少','壓力型頭皮'];
+const needItems=['控油','止癢','去屑','放鬆舒壓','增加蓬鬆感','改善掉髮','養髮生髮','頭皮保養','改善異味','深層清潔','敏感修護','改善毛孔堵塞'];
+let lastLink='';
+function init(){document.getElementById('date').value=new Date().toISOString().slice(0,10);document.getElementById('scores').innerHTML=scoreItems.map(x=>`<div class="score-row"><strong>${x}</strong><select data-score="${x}"><option value="1">1 良好</option><option value="2">2 輕微</option><option value="3">3 中度</option><option value="4">4 嚴重</option></select></div>`).join('');document.getElementById('problems').innerHTML=problemItems.map(x=>`<label class="check"><input type="checkbox" data-problem="${x}">${x}</label>`).join('');document.getElementById('needs').innerHTML=needItems.map(x=>`<label class="check"><input type="checkbox" data-need="${x}">${x}</label>`).join('');loadFromUrl()} 
+function getChecked(attr){return [...document.querySelectorAll(`input[${attr}]:checked`)].map(i=>i.getAttribute(attr))}
+function getScores(){let obj={};document.querySelectorAll('[data-score]').forEach(s=>obj[s.getAttribute('data-score')]=s.value);return obj}
+function levelClass(v){v=Number(v);if(v<=1)return 'level-good';if(v<=2)return 'level-mid';return 'level-high'}
+function levelText(v){return ['','良好','輕微','中度','嚴重'][Number(v)]||''}
+function collect(){return {name:val('name')||'貴賓',date:val('date'),type:val('type'),scores:getScores(),problems:getChecked('data-problem'),needs:getChecked('data-need'),course:val('course'),freq:val('freq'),advice:val('advice')}}
+function val(id){return document.getElementById(id).value}
+function encodeData(data){return btoa(unescape(encodeURIComponent(JSON.stringify(data))))}
+function decodeData(str){return JSON.parse(decodeURIComponent(escape(atob(str))))}
+function generateReport(){const data=collect();const url=location.origin+location.pathname+'?r='+encodeData(data);lastLink=url;history.replaceState(null,'',url);renderReport(data);makeQR(url)}
+function makeQR(url){const qr='https://api.qrserver.com/v1/create-qr-code/?size=260x260&data='+encodeURIComponent(url);document.getElementById('qrbox').innerHTML=`<img src="${qr}" alt="QR Code"><div class="small">${url}</div>`}
+function renderReport(d){document.getElementById('formView').classList.add('hidden');document.getElementById('reportView').classList.remove('hidden');let scoreRows=Object.entries(d.scores).map(([k,v])=>`<tr><td>${k}</td><td class="${levelClass(v)}">${v}｜${levelText(v)}</td></tr>`).join('');document.getElementById('report').innerHTML=`<h2>${d.name} 的頭皮檢測報告</h2><p><strong>檢測日期：</strong>${d.date||''}</p><p><strong>頭皮類型：</strong>${d.type}</p><div class="line"></div><h3>量化檢測結果</h3><table class="score-table"><tr><th>檢測項目</th><th>評分</th></tr>${scoreRows}</table><h3>目前頭皮問題</h3>${(d.problems.length?d.problems:['未勾選']).map(x=>`<span class="badge">${x}</span>`).join('')}<h3>客人主要需求</h3>${(d.needs.length?d.needs:['未勾選']).map(x=>`<span class="badge">${x}</span>`).join('')}<div class="line"></div><h3>建議課程規劃</h3><p><strong>建議療程：</strong>${d.course}</p><p><strong>建議頻率：</strong>${d.freq}</p><h3>專業建議</h3><p>${(d.advice||'建議依照頭皮狀態定期追蹤，先改善主要問題，再進入穩定保養。').replace(/\n/g,'<br>')}</p><p class="small">提醒：本報告為頭皮保養與門市諮詢參考，若有嚴重發炎、傷口、異常大量落髮或皮膚病症狀，建議諮詢皮膚科醫師。</p>`}
+function loadFromUrl(){const p=new URLSearchParams(location.search);if(p.get('r')){try{renderReport(decodeData(p.get('r')))}catch(e){alert('報告連結讀取失敗')}}}
+function backToForm(){document.getElementById('reportView').classList.add('hidden');document.getElementById('formView').classList.remove('hidden');history.replaceState(null,'',location.pathname)}
+function copyLink(){if(!lastLink){alert('請先產生報告＋QR');return}navigator.clipboard.writeText(lastLink).then(()=>alert('已複製客戶連結'))}
+function clearForm(){document.querySelectorAll('input,textarea').forEach(i=>{if(i.type==='checkbox')i.checked=false;else i.value=''});document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);document.getElementById('date').value=new Date().toISOString().slice(0,10);document.getElementById('qrbox').innerHTML='尚未產生報告';lastLink=''}
+function fillDemo(){document.getElementById('name').value='王小姐';document.getElementById('type').value='油性頭皮';document.querySelector('[data-score="出油狀況"]').value='4';document.querySelector('[data-score="毛孔堵塞"]').value='3';document.querySelector('[data-score="頭皮敏感"]').value='2';document.querySelector('[data-score="頭皮屑"]').value='2';['出油明顯','髮根扁塌','毛孔堵塞','頭皮異味'].forEach(x=>{let el=document.querySelector(`[data-problem="${x}"]`); if(el)el.checked=true});['控油','深層清潔','改善異味','增加蓬鬆感'].forEach(x=>{let el=document.querySelector(`[data-need="${x}"]`); if(el)el.checked=true});document.getElementById('course').value='控油平衡調理';document.getElementById('freq').value='每週 1 次，連續 4 週觀察改善';document.getElementById('advice').value='目前以出油與毛孔堵塞為主要問題，建議先做深層淨化與控油調理，搭配居家洗護調整。'}
+init();
+</script>
+</body>
+</html>
