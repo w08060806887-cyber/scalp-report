@@ -237,3 +237,31 @@ function resetForm(){location.href=location.pathname;}
 </script>
 </body>
 </html>
+
+{
+  "name": "zeva-scalp-latest-project",
+  "version": "1.0.0",
+  "private": true
+}
+# Zeva 頭皮檢測系統｜最新版專案化
+
+這包是用「你剛剛最新的版型」直接專案化。
+
+## 檔案
+- `index.html`：保留原本最新版完整網站，不拆版型，避免跑版
+- `api/analyze.js`：AI 分析 API，之後接 OpenAI 用
+- `package.json`：Vercel 專案基本設定
+
+## 上傳方式
+1. 解壓縮
+2. 把整包檔案上傳到 GitHub 專案
+3. Vercel 會自動部署
+
+## 下一步接 AI
+到 Vercel：
+Project Settings → Environment Variables
+
+新增：
+OPENAI_API_KEY = 你的 OpenAI API Key
+
+重新 Deploy 後，才會真的可以呼叫 AI。
