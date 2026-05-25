@@ -50,13 +50,13 @@ label{display:block;font-weight:800;margin:12px 0 6px} input,select,textarea{wid
 <main class="wrap">
 <section class="card formCard">
 <h2>① 建立頭皮檢測報告</h2>
+<h3>客人基本資料</h3>
 <div class="two">
   <div><label>客戶姓名</label><input id="name" placeholder="請輸入客戶姓名"></div>
+  <div><label>顧客電話</label><input id="phone" inputmode="tel" placeholder="請輸入顧客電話"></div>
   <div><label>性別</label><select id="gender"><option>女性</option><option>男性</option><option>其他</option></select></div>
-  <div><label>年齡</label><input id="age" inputmode="numeric" placeholder="請輸入年齡"></div>
-  <div><label>檢測日期</label><input id="date" type="date"></div>
+  <div><label>年齡區間</label><select id="age"><option>20 以下</option><option>20-30</option><option>31-40</option><option>41-50</option><option>50 以上</option></select></div>
 </div>
-<label>檢測人員</label><input id="staff" placeholder="請輸入檢測人員">
 
 <h3>② 拍攝頭皮照片</h3>
 <p class="small">手機點「選擇檔案」可直接拍照。圖片會壓縮後放進報告。</p>
@@ -106,10 +106,8 @@ const sopGroups = [
   { key:"hairLossState", title:"8. 脫髮情況", type:"single", options:["有改善","沒有改善","維持穩定"] },
   { key:"scalpState", title:"9. 頭皮情況", type:"single", options:["有改善","沒有改善","維持穩定"] }
 ];
-const photoLabels = ["1倍鏡頭：頭頂及分界位","1倍鏡頭：左邊髮線","1倍鏡頭：右邊髮線","60倍鏡頭：發炎區域","60倍鏡頭：敏感區域","60倍鏡頭：角質厚區域","60倍鏡頭：重點脫髮區域","檢測後對比"];
+const photoLabels = ["1倍鏡頭：頭頂及分界位","1倍鏡頭：左邊髮線","1倍鏡頭：右邊髮線","60倍鏡頭：發炎區域","60倍鏡頭：敏感區域","60倍鏡頭：角質厚區域","60倍鏡頭：重點脫髮區域"];
 const photos = {};
-
-document.getElementById("date").valueAsDate = new Date();
 
 function init(){
   document.getElementById("sopChecks").innerHTML = sopGroups.map((group, gi)=>`
@@ -170,7 +168,7 @@ function getSopData(){
 
 function getData(){
   return {
-    name:val("name"), gender:val("gender"), age:val("age"), date:val("date"), staff:val("staff"),
+    name:val("name"), phone:val("phone"), gender:val("gender"), age:val("age"),
     type:val("type"), course:val("course"), freq:val("freq"), advice:val("advice"), otherProblem:val("otherProblem"),
     sop:getSopData(),
     photos:Object.keys(photos).map(k=>({label:photoLabels[k], src:photos[k]}))
@@ -189,7 +187,7 @@ function generate(fromHash){
     <div class="infoGrid">
       <div class="infoBox">
         <h3>客戶資訊</h3>
-        姓名：${esc(d.name)}<br>性別：${esc(d.gender)}<br>年齡：${esc(d.age)}<br>檢測日期：${esc(d.date)}<br>檢測人員：${esc(d.staff)}
+        姓名：${esc(d.name)}<br>電話：${esc(d.phone)}<br>性別：${esc(d.gender)}<br>年齡區間：${esc(d.age)}
       </div>
       <div class="qrbox noPrint"><img src="${qr}"><div class="small">掃描 QR Code<br>查看專屬報告</div></div>
     </div>
@@ -220,7 +218,7 @@ function copyReportLink(){
   alert("已複製報告連結");
 }
 function demo(){
-  document.getElementById("name").value="王小姐";document.getElementById("age").value="28";document.getElementById("staff").value="Zeva 顧問";
+  document.getElementById("name").value="王小姐";document.getElementById("phone").value="0912-345-678";document.getElementById("age").value="20-30";
   const demoValues = {
     follicleInflammation:["否"], sensitiveState:["痕癢感","紅腫"], keratinState:["偏油","油脂粒"],
     emptyFollicle:["是"], newHairGrowth:["是"], hairBreakage:["否"], focusArea:["分界","頭頂"],
